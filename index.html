@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superstack — Idea to Launch on Solana</title>
+<link rel="canonical" href="https://dev.sol.new/">
+<meta name="description" content="A 45-minute workshop on shipping a full Solana product from your terminal with Superstack's AI skill library. Hosted at dev.sol.new.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="dev.sol.new">
+<meta property="og:url" content="https://dev.sol.new/">
+<meta property="og:title" content="Superstack — Idea to Launch on Solana">
+<meta property="og:description" content="A 45-minute workshop on shipping a full Solana product from your terminal with Superstack's AI skill library. Hosted at dev.sol.new.">
+<meta property="og:image" content="https://dev.sol.new/assets/powered-by-solana.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@metasal">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/sol-mark.svg">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a10;
+    --surface: #111118;
+    --border: rgba(255,255,255,0.09);
+    --text: #e8e8f0;
+    --muted: #8a8a9a;
+    --green: #14f195;
+    --purple: #9945ff;
+    --blue: #00c4ff;
+    --orange: #ff8c42;
+  }
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+    background:
+      radial-gradient(1100px 520px at 80% -10%, rgba(153,69,255,0.16), transparent 60%),
+      radial-gradient(900px 480px at 10% 110%, rgba(20,241,149,0.12), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 72px 28px 40px; }
+
+  .topbar { display: flex; align-items: center; gap: 14px; margin-bottom: 56px; }
+  .logo-mark {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple), var(--green));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark img { width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(4%); }
+  .brandname { font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; }
+  .brandname b { color: var(--text); }
+
+  .hero h1 { font-size: 3rem; font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; }
+  .hero h1 .grad {
+    background: linear-gradient(100deg, var(--purple), var(--green));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p { color: #b2b2c6; font-size: 1.05rem; margin-top: 16px; max-width: 640px; }
+  .install {
+    margin-top: 22px; display: inline-flex; align-items: center; gap: 10px;
+    background: #0d1117; border: 1px solid rgba(20,241,149,0.3);
+    border-radius: 10px; padding: 12px 18px; font-size: 0.92rem; color: var(--green);
+  }
+  .install .p { color: #4a4a55; }
+
+  .dir-label {
+    margin: 52px 0 16px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--muted); display: flex; align-items: center; gap: 10px;
+  }
+  .dir-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .files { display: grid; gap: 14px; }
+  .file {
+    display: flex; align-items: center; gap: 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 24px;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.18s, transform 0.18s, background 0.18s;
+  }
+  .file:hover { border-color: rgba(20,241,149,0.45); transform: translateY(-2px); background: #14141d; }
+  .file .ic {
+    width: 46px; height: 46px; flex-shrink: 0; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  }
+  .file .ic img { width: 24px; height: 24px; }
+  .file .meta { flex: 1; }
+  .file .meta .name { font-size: 1.05rem; font-weight: 700; }
+  .file .meta .name .fn { color: var(--muted); font-weight: 400; font-size: 0.82rem; margin-left: 8px; }
+  .file .meta .desc { font-size: 0.86rem; color: var(--muted); margin-top: 3px; }
+  .file .go { color: var(--muted); font-size: 1.2rem; transition: color 0.18s, transform 0.18s; }
+  .file:hover .go { color: var(--green); transform: translateX(3px); }
+  .file .tag {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; align-self: flex-start;
+  }
+  .tag.deck { background: rgba(153,69,255,0.14); color: var(--purple); border: 1px solid rgba(153,69,255,0.35); }
+  .tag.guide { background: rgba(0,196,255,0.12); color: var(--blue); border: 1px solid rgba(0,196,255,0.35); }
+  .tag.print { background: rgba(255,140,66,0.12); color: var(--orange); border: 1px solid rgba(255,140,66,0.35); }
+
+  .site-footer {
+    margin-top: 64px; padding-top: 26px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  }
+  .site-footer .pbs img { height: 46px; display: block; }
+  .site-footer .by { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+  .site-footer .by .pfp { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); }
+  .site-footer .by a { color: var(--purple); text-decoration: none; font-weight: 700; }
+  .site-footer .by a:hover { color: var(--green); }
+
+  @media (max-width: 560px) {
+    .hero h1 { font-size: 2.1rem; }
+    .file { flex-wrap: wrap; gap: 12px; }
+    .file .go { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo-mark"><img src="assets/sol-mark.svg" alt="Solana"></div>
+    <div class="brandname"><b>Superstack</b> · solana.new</div>
+  </div>
+
+  <div class="hero">
+    <h1>Idea to Launch<br><span class="grad">on Solana</span></h1>
+    <p>A 45-minute workshop on shipping a full Solana product from your terminal with Superstack's curated AI skill library. Browse the materials below.</p>
+    <div class="install"><span class="p">$</span> bash &lt;(curl -sSf https://solana.new/install)</div>
+  </div>
+
+  <div class="dir-label">Directory · workshop materials</div>
+
+  <div class="files">
+    <a class="file" href="slides.html">
+      <span class="ic"><img src="assets/sol-mark.svg" alt=""></span>
+      <span class="meta">
+        <span class="name">Presentation Slides<span class="fn">slides.html</span></span>
+        <span class="desc">20-slide workshop deck — arrow keys to navigate. Idea → Build → Launch.</span>
+      </span>
+      <span class="tag deck">Deck</span>
+      <span class="go">→</span>
+    </a>
+
+    <a class="file" href="tutorial.html">
+      <span class="ic"><img src="assets/sol-mark.svg" alt=""></span>
+      <span class="meta">
+        <span class="name">Step-by-Step Tutorial<span class="fn">tutorial.html</span></span>
+        <span class="desc">Hands-on guide through every skill, from prerequisites to mainnet deploy.</span>
+      </span>
+      <span class="tag guide">Guide</span>
+      <span class="go">→</span>
+    </a>
+
+    <a class="file" href="handout.html">
+      <span class="ic"><img src="assets/sol-mark.svg" alt=""></span>
+      <span class="meta">
+        <span class="name">Printable Handout<span class="fn">handout.html</span></span>
+        <span class="desc">One-page reference card — skill tables, checklists, quick commands. Print to PDF.</span>
+      </span>
+      <span class="tag print">Print</span>
+      <span class="go">→</span>
+    </a>
+  </div>
+
+  <footer class="site-footer">
+    <a class="pbs" href="https://solana.com" target="_blank" rel="noopener"><img src="assets/powered-by-solana.svg" alt="Powered by Solana"></a>
+    <div class="by">
+      <a href="https://x.com/metasal" target="_blank" rel="noopener"><img class="pfp" src="assets/metasal.jpg" alt="metasal"></a>
+      <span>Built by <a href="https://metasal.xyz" target="_blank" rel="noopener">metasal.xyz</a></span>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

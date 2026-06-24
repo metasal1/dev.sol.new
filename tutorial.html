@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superstack Tutorial — Step-by-Step Guide</title>
+<link rel="canonical" href="https://dev.sol.new/tutorial">
+<meta name="description" content="Hands-on guide through every Superstack skill, from prerequisites to mainnet deploy. dev.sol.new">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="dev.sol.new">
+<meta property="og:url" content="https://dev.sol.new/tutorial">
+<meta property="og:title" content="Superstack — Step-by-Step Tutorial">
+<meta property="og:description" content="Hands-on guide through every Superstack skill, from prerequisites to mainnet deploy. dev.sol.new">
+<meta property="og:image" content="https://dev.sol.new/assets/powered-by-solana.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@metasal">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a10;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: rgba(255,255,255,0.08);
+    --text: #e0e0f0;
+    --muted: #888;
+    --green: #14f195;
+    --purple: #9945ff;
+    --blue: #00c4ff;
+    --orange: #ff8c42;
+    --red: #ff4466;
+  }
+
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 0;
+  }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo .mark {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--purple), var(--green));
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900; color: #000;
+    margin-bottom: 8px;
+  }
+  .sidebar-logo h2 { font-size: 14px; font-weight: 700; }
+  .sidebar-logo p { font-size: 11px; color: var(--muted); }
+
+  .nav-section { padding: 8px 20px 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; }
+
+  .nav-item {
+    display: block;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active { color: var(--green); border-left-color: var(--green); background: rgba(20,241,149,0.05); }
+  .nav-item .step-num { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.08); font-size: 10px; text-align: center; line-height: 18px; margin-right: 8px; }
+
+  /* Main content */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    max-width: 820px;
+    padding: 48px 56px;
+  }
+
+  /* Progress tracker */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 260px;
+    right: 0;
+    height: 3px;
+    background: var(--border);
+    z-index: 50;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--green));
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  /* Page header */
+  .page-header { margin-bottom: 48px; }
+  .page-header .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .page-header h1 { font-size: 2.4rem; font-weight: 800; line-height: 1.1; }
+  .page-header .subtitle { font-size: 1.1rem; color: #b0b0c8; margin-top: 10px; max-width: 600px; }
+
+  /* Sections */
+  .tutorial-section {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(153,69,255,0.2);
+    border: 1px solid rgba(153,69,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+    color: var(--purple);
+    flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 1.5rem; font-weight: 700; }
+  .section-header .time-est {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* Goal box */
+  .goal-box {
+    background: rgba(153,69,255,0.08);
+    border: 1px solid rgba(153,69,255,0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .goal-box .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); font-weight: 700; margin-bottom: 4px; }
+
+  /* Step cards */
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .step-card:before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+    background: var(--green);
+  }
+  .step-card.warn:before { background: var(--orange); }
+  .step-card.info:before { background: var(--blue); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .step-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    background: rgba(20,241,149,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .step-badge.warn { color: var(--orange); background: rgba(255,140,66,0.1); }
+  .step-badge.info { color: var(--blue); background: rgba(0,196,255,0.1); }
+  .step-title { font-size: 15px; font-weight: 600; }
+
+  /* Code blocks */
+  .code {
+    background: #080c10;
+    border: 1px solid rgba(20,241,149,0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    margin: 12px 0;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code .prompt { color: #555; user-select: none; }
+  .code .cmd { color: var(--green); }
+  .code .comment { color: #555; font-style: italic; }
+  .code .output { color: #888; }
+  .code .highlight { color: var(--purple); }
+  .code-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: system-ui;
+  }
+
+  /* Inline code */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--green);
+  }
+
+  /* Expected output */
+  .expected-output {
+    background: #06100a;
+    border: 1px solid rgba(20,241,149,0.15);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 12px;
+    color: #7ec8a0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .expected-output .eo-label {
+    font-family: system-ui;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(20,241,149,0.5);
+    margin-bottom: 8px;
+  }
+
+  /* Callouts */
+  .callout {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .callout.tip { background: rgba(20,241,149,0.07); border: 1px solid rgba(20,241,149,0.2); }
+  .callout.warn { background: rgba(255,140,66,0.07); border: 1px solid rgba(255,140,66,0.2); }
+  .callout.danger { background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.2); }
+  .callout.info { background: rgba(0,196,255,0.07); border: 1px solid rgba(0,196,255,0.2); }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+  .callout-body strong { display: block; margin-bottom: 4px; }
+  .callout.tip strong { color: var(--green); }
+  .callout.warn strong { color: var(--orange); }
+  .callout.danger strong { color: var(--red); }
+  .callout.info strong { color: var(--blue); }
+
+  /* Skill details */
+  .skill-detail {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .skill-detail .skill-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 6px;
+  }
+  .skill-detail .skill-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .skill-detail p { font-size: 13px; color: #b0b0c8; margin-bottom: 8px; }
+  .skill-detail .produces { font-size: 11px; }
+  .skill-detail .produces span {
+    display: inline-block;
+    background: rgba(20,241,149,0.08);
+    border: 1px solid rgba(20,241,149,0.2);
+    color: var(--green);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+
+  /* Decision box */
+  .decision-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .decision-box h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; }
+  .decision-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .decision-row:last-child { border-bottom: none; }
+  .decision-cond { flex: 2; color: #c0c0d8; }
+  .decision-action { flex: 3; color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* Score breakdown */
+  .score-breakdown {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 14px 0;
+  }
+  .score-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .score-item:last-child { border-bottom: none; }
+  .score-item .label { flex: 2; color: #c0c0d8; }
+  .score-item .bar { flex: 3; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+  .score-item .fill { height: 100%; border-radius: 3px; }
+  .score-item .val { width: 50px; text-align: right; font-size: 11px; font-weight: 700; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  .tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Checklist */
+  .check-list { list-style: none; margin: 12px 0; }
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .check-list li:last-child { border-bottom: none; }
+  .check-list li input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--green); }
+  .check-list li .note { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+
+  /* Table */
+  .data-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  .data-table th { padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; color: #c0c0d8; vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Heading styles in body */
+  h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; margin-top: 24px; }
+  h3:first-child { margin-top: 0; }
+  p { color: #b0b0c8; margin-bottom: 10px; font-size: 14px; }
+  ul { margin: 8px 0 12px 20px; }
+  li { font-size: 13px; color: #b0b0c8; padding: 3px 0; }
+
+  /* Phase header */
+  .phase-banner {
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .phase-banner.idea { background: rgba(20,241,149,0.06); border: 1px solid rgba(20,241,149,0.2); }
+  .phase-banner.build { background: rgba(0,196,255,0.06); border: 1px solid rgba(0,196,255,0.2); }
+  .phase-banner.launch { background: rgba(255,140,66,0.06); border: 1px solid rgba(255,140,66,0.2); }
+  .phase-banner .icon { font-size: 2.2rem; }
+  .phase-banner .text h3 { margin: 0 0 4px 0; font-size: 1rem; }
+  .phase-banner .text p { margin: 0; font-size: 12px; color: var(--muted); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .sol-ico { height: 1em; width: auto; display: inline-block; vertical-align: -0.14em; }
+  .callout-icon{font-weight:700;font-family:'JetBrains Mono',monospace}
+  .callout.tip .callout-icon{color:var(--green)}
+  .callout.warn .callout-icon{color:var(--orange)}
+  .callout.danger .callout-icon{color:var(--red)}
+  .callout.info .callout-icon{color:var(--blue)}
+  .site-footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .site-footer .pbs img{height:44px;display:block}
+  .site-footer .by{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+  .site-footer .by .pfp{width:30px;height:30px;border-radius:50%;border:1px solid var(--border)}
+  .site-footer .by a{color:var(--purple);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="mark">S</div>
+      <h2>Superstack Tutorial</h2>
+      <p>solana.new · 45-min workshop</p>
+    </div>
+
+    <div class="nav-section">Setup</div>
+    <a href="#s0" class="nav-item active"><span class="step-num">0</span>Prerequisites</a>
+    <a href="#s1" class="nav-item"><span class="step-num">1</span>Install Superstack</a>
+    <a href="#s2" class="nav-item"><span class="step-num">2</span>Navigate Skills</a>
+
+    <div class="nav-section">Idea Phase</div>
+    <a href="#s3" class="nav-item"><span class="step-num">3</span>Find an Idea</a>
+    <a href="#s4" class="nav-item"><span class="step-num">4</span>Validate the Idea</a>
+    <a href="#s5" class="nav-item"><span class="step-num">5</span>Colosseum Alignment</a>
+
+    <div class="nav-section">Build Phase</div>
+    <a href="#s6" class="nav-item"><span class="step-num">6</span>Brand & Design System</a>
+    <a href="#s7" class="nav-item"><span class="step-num">7</span>Build the UI</a>
+    <a href="#s8" class="nav-item"><span class="step-num">8</span>Scaffold the Contract</a>
+
+    <div class="nav-section">Launch Phase</div>
+    <a href="#s9" class="nav-item"><span class="step-num">9</span>Create Pitch Deck</a>
+    <a href="#s10" class="nav-item"><span class="step-num">10</span>Roast Your Product</a>
+    <a href="#s11" class="nav-item"><span class="step-num">11</span>Marketing Video</a>
+    <a href="#s12" class="nav-item"><span class="step-num">12</span>Deploy to Mainnet</a>
+
+    <div class="nav-section">Reference</div>
+    <a href="#s13" class="nav-item"><span class="step-num">→</span>All Skills</a>
+    <a href="#s14" class="nav-item"><span class="step-num">→</span>Contributing</a>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <div class="page-header">
+      <div class="breadcrumb">superstack · tutorial · idea to launch</div>
+      <h1>Build a Solana Product<br><span style="color:var(--green)">Idea to Launch</span></h1>
+      <p class="subtitle">A step-by-step guide through every Superstack skill — from finding an idea to pitching it at a hackathon. Takes about 45 minutes to complete with the live demos.</p>
+    </div>
+
+    <!-- STEP 0: Prerequisites -->
+    <section class="tutorial-section" id="s0">
+      <div class="section-header">
+        <div class="section-num">0</div>
+        <h2>Prerequisites</h2>
+        <span class="time-est">2 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Make sure you have everything needed before installing Superstack.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Required</span><span class="step-title">Node.js & npm</span></div>
+        <div class="code-label">Check version</div>
+        <div class="code"><span class="prompt">$ </span><span class="cmd">node --version</span>  <span class="comment"># need v18+</span>
+<span class="output">v20.11.0 ✓</span></div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Required</span><span class="step-title">An AI agent runtime</span></div>
+        <p>You need at least one of these installed and working:</p>
+        <div class="code"><span class="prompt">$ </span><span class="cmd">claude --version</span>  <span class="comment"># Claude Code (recommended)</span>
+<span class="comment"># OR</span>
+<span class="prompt">$ </span><span class="cmd">codex --version</span>   <span class="comment"># OpenAI Codex</span></div>
+        <div class="callout tip">
+          <span class="callout-icon">[+]</span>
+          <div class="callout-body"><strong>Recommended: Claude Code</strong>This tutorial uses Claude Code throughout. Install it with <code>npm install -g @anthropic-ai/claude-code</code>.</div>
+        </div>
+      </div>
+
+      <div class="step-card info">
+        <div class="step-header"><span class="step-badge info">Optional</span><span class="step-title">Solana CLI (for build/deploy steps)</span></div>
+        <div class="code"><span class="prompt">$ </span><span class="cmd">sh -c "$(curl -sSfL https://release.solana.com/stable/install)"</span>
+<span class="prompt">$ </span><span class="cmd">solana --version</span></div>
+      </div>
+    </section>
+
+    <!-- STEP 1: Install -->
+    <section class="tutorial-section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>Install Superstack</h2>
+        <span class="time-est">1 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Install all Superstack skills into your agent's context directory with a single command.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Run the installer</span></div>
+        <div class="code-label">Terminal — run from any directory</div>
+        <div class="code"><span class="prompt">$ </span><span class="cmd">bash &lt;(curl -sSf https://solana.new/install)</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">Expected output</div>
+          Detecting agent runtimes...<br>
+          ✓ Claude Code found at ~/.claude/<br>
+          ✓ Codex found at ~/.codex/<br>
+          Installing 24 skills...<br>
+          ✓ validate-idea<br>
+          ✓ brand-design<br>
+          ✓ create-pitch-deck<br>
+          ... (24 total)<br>
+          ✓ Superstack installed successfully
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Verify</span><span class="step-title">Confirm installation</span></div>
+        <div class="code"><span class="prompt">$ </span><span class="cmd">ls ~/.claude/skills/</span>
+<span class="output">validate-idea.md  brand-design.md  create-pitch-deck.md  ...</span></div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">[+]</span>
+        <div class="callout-body"><strong>No restart needed</strong>Skills are available immediately in any new Claude Code or Codex session. Open a new terminal and they're ready.</div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Navigate Skills -->
+    <section class="tutorial-section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>Navigate the Skill Library</h2>
+        <span class="time-est">3 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Get a full overview of every available skill, organised by phase.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Open Claude and ask for the skill list</span></div>
+        <div class="code-label">In Claude Code (or any agent)</div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">tell me all skills available in Superstack<br>         and help me navigate across skills</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">Expected output</div>
+          Loading /navigate-skills...<br><br>
+          IDEA PHASE<br>
+          • /find-next-crypto-idea<br>
+          • /validate-idea<br>
+          • /competitive-landscape<br>
+          • /defillama-research<br>
+          • /colosseum-copilot<br><br>
+          BUILD PHASE<br>
+          • /scaffold-project<br>
+          • /build-defi-protocol<br>
+          • /frontend-design-guidelines<br>
+          • /brand-design<br>
+          • /build-mobile<br><br>
+          LAUNCH PHASE<br>
+          • /create-pitch-deck<br>
+          • /marketing-video<br>
+          • /video-craft<br>
+          • /deploy-to-mainnet<br><br>
+          DESIGN & META<br>
+          • /design-taste<br>
+          • /roast-my-product<br>
+          ...
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">[+]</span>
+        <div class="callout-body"><strong>Pro tip</strong>Start every session with this prompt. The list is your map — pick the skill that matches where you are in your project lifecycle.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- IDEA PHASE -->
+    <div class="phase-banner idea">
+      <span class="icon"><img class="sol-ico" src="assets/sol-mark.svg" alt="Solana"></span>
+      <div class="text">
+        <h3 style="color:var(--green)">Phase 1: Idea</h3>
+        <p>Find, research, and validate your product idea before writing a single line of code.</p>
+      </div>
+    </div>
+
+    <!-- STEP 3: Find an Idea -->
+    <section class="tutorial-section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>Find a Product Idea</h2>
+        <span class="time-est">5 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Either use Superstack to generate ideas, or bring your own idea from solana.new's top ideas list.
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="showTab(this,'tab-generate')">Generate an idea</div>
+        <div class="tab" onclick="showTab(this,'tab-browse')">Browse top ideas</div>
+      </div>
+
+      <div class="tab-content active" id="tab-generate">
+        <div class="step-card">
+          <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Use /find-next-crypto-idea</span></div>
+          <div class="code"><span class="prompt">Claude: </span><span class="cmd">/find-next-crypto-idea</span>
+<span class="comment"># or with constraints:</span>
+<span class="prompt">Claude: </span><span class="cmd">/find-next-crypto-idea — I want something in DeFi,<br>         medium complexity, that I can demo at a hackathon</span></div>
+          <p>The skill will generate 5–10 ranked ideas with market rationale, existing alternatives, and an initial feasibility estimate.</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-browse">
+        <div class="step-card">
+          <div class="step-header"><span class="step-badge info">Alternative</span><span class="step-title">Browse solana.new for curated ideas</span></div>
+          <p>Visit <strong style="color:var(--green)">solana.new</strong> and copy any idea you find interesting. The site maintains a curated list of the most-wanted builds in the Solana ecosystem.</p>
+          <p>For this tutorial we'll use <strong>Power Perps</strong>:</p>
+          <div class="code"><span class="comment"># Paste the idea into your Claude session:</span>
+<span class="prompt">Claude: </span><span class="cmd">Build a perpetuals trading protocol with power-law<br>         pricing mechanics targeting retail traders on Solana.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: Validate -->
+    <section class="tutorial-section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>Validate the Idea</h2>
+        <span class="time-est">8 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Get an objective, scored assessment of your idea before committing to build it.
+      </div>
+
+      <div class="skill-detail">
+        <div class="skill-name">/validate-idea</div>
+        <div class="skill-meta"><span>~2 min to run</span><span>Outputs HTML report</span><span>6 scoring dimensions</span></div>
+        <p>Evaluates your idea on six dimensions and produces a detailed HTML report with scores, risks, and recommendations. The report includes an "integration-first" section that identifies existing Solana protocols you could build on top of instead of building from scratch.</p>
+        <div class="produces">Produces: <span>HTML report</span><span>Score card</span><span>Risk summary</span><span>Integration map</span></div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Run the validation</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/validate-idea</span>
+
+<span class="comment"># paste your problem statement when prompted:</span>
+<span class="output">Build a perpetuals trading protocol with power-law</span>
+<span class="output">pricing mechanics targeting retail traders on Solana.</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">Output (excerpt)</div>
+          Validation complete. Opening report...<br><br>
+          SCORECARD<br>
+          Demand Signal      ████████░░  82%  Strong ✓<br>
+          Competitive Risk   █████░░░░░  55%  Medium<br>
+          Build Feasibility  ███████░░░  72%  High ✓<br>
+          Crypto Necessity   █████████░  90%  Essential ✓<br>
+          Target User        ██████░░░░  60%  Needs work<br>
+          Integration-First  ████████░░  80%  Yes ✓<br><br>
+          KEY RECOMMENDATION<br>
+          Build on top of Drift Protocol or Jupiter Perpetuals<br>
+          rather than building a new AMM from scratch.
+        </div>
+      </div>
+
+      <div class="score-breakdown">
+        <div class="score-item">
+          <span class="label">Demand Signal</span>
+          <div class="bar"><div class="fill" style="width:82%;background:var(--green)"></div></div>
+          <span class="val" style="color:var(--green)">82%</span>
+        </div>
+        <div class="score-item">
+          <span class="label">Competitive Risk</span>
+          <div class="bar"><div class="fill" style="width:55%;background:var(--orange)"></div></div>
+          <span class="val" style="color:var(--orange)">Med</span>
+        </div>
+        <div class="score-item">
+          <span class="label">Build Feasibility</span>
+          <div class="bar"><div class="fill" style="width:72%;background:var(--blue)"></div></div>
+          <span class="val" style="color:var(--blue)">72%</span>
+        </div>
+        <div class="score-item">
+          <span class="label">Crypto Necessity</span>
+          <div class="bar"><div class="fill" style="width:90%;background:var(--purple)"></div></div>
+          <span class="val" style="color:var(--purple)">90%</span>
+        </div>
+        <div class="score-item">
+          <span class="label">Target User Clarity</span>
+          <div class="bar"><div class="fill" style="width:60%;background:var(--orange)"></div></div>
+          <span class="val" style="color:var(--orange)">60%</span>
+        </div>
+        <div class="score-item">
+          <span class="label">Integration-First</span>
+          <div class="bar"><div class="fill" style="width:80%;background:var(--green)"></div></div>
+          <span class="val" style="color:var(--green)">80%</span>
+        </div>
+      </div>
+
+      <div class="decision-box">
+        <h4>What to do with your score</h4>
+        <div class="decision-row">
+          <span class="decision-cond">Overall score ≥ 75%</span>
+          <span class="decision-action">→ Proceed to build phase</span>
+        </div>
+        <div class="decision-row">
+          <span class="decision-cond">Score 50–74%, addressable issues</span>
+          <span class="decision-action">→ Fix top issues, re-run /validate-idea</span>
+        </div>
+        <div class="decision-row">
+          <span class="decision-cond">Score &lt;50% or "no crypto necessity"</span>
+          <span class="decision-action">→ Pivot; run /find-next-crypto-idea</span>
+        </div>
+        <div class="decision-row">
+          <span class="decision-cond">Low Integration-First score</span>
+          <span class="decision-action">→ Research existing protocols first</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5: Colosseum -->
+    <section class="tutorial-section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>Colosseum Hackathon Alignment</h2>
+        <span class="time-est">3 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Map your idea to the Colosseum judging rubric and choose the best prize track to target.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Run /colosseum-copilot</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/colosseum-copilot</span>
+<span class="comment"># then describe your idea when prompted</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">Output (excerpt)</div>
+          COLOSSEUM ALIGNMENT<br><br>
+          Recommended track: DeFi Innovation<br>
+          Win probability: Medium-High<br><br>
+          Rubric fit:<br>
+          Innovation           ████████░░  78%<br>
+          Technical Depth      ████████░░  80%<br>
+          Market Potential     █████████░  88%<br>
+          Presentation Ready   ██████░░░░  65%  ← needs work<br><br>
+          Key differentiator to emphasise: power-law payoff<br>
+          structure not seen in existing Solana perps.
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <span class="callout-icon">[!]</span>
+        <div class="callout-body"><strong>Presentation score</strong>A low Presentation score here means your pitch deck needs work — not your product. Use <code>/create-pitch-deck</code> in the launch phase to address this.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- BUILD PHASE -->
+    <div class="phase-banner build">
+      <span class="icon"><img class="sol-ico" src="assets/sol-mark.svg" alt="Solana"></span>
+      <div class="text">
+        <h3 style="color:var(--blue)">Phase 2: Build</h3>
+        <p>Go from idea to a fully styled front end and scaffolded Anchor program.</p>
+      </div>
+    </div>
+
+    <!-- STEP 6: Brand Design -->
+    <section class="tutorial-section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>Brand & Design System</h2>
+        <span class="time-est">5 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Choose a visual identity and generate CSS design tokens that the UI generation step will use.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Trigger brand design (via frontend skill)</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/frontend-design-guidelines — build the front end<br>         for this perps trading idea using mock data to start</span></div>
+        <p>The skill automatically invokes <code>/brand-design</code> first. It will generate 6 colour palette options as an HTML file and ask you to choose one.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Choose your palette</span></div>
+        <p>Open the generated HTML file in your browser. Six palettes are shown. For a trading protocol, consider:</p>
+        <div class="data-table" style="margin:0">
+          <table class="data-table">
+            <tr><th>Palette</th><th>Best for</th><th>Feeling</th></tr>
+            <tr><td><code>whale-blue</code></td><td>Trading / DeFi</td><td>Trustworthy, institutional</td></tr>
+            <tr><td><code>solana-gradient</code></td><td>Native Solana products</td><td>Modern, energetic</td></tr>
+            <tr><td><code>midnight-gold</code></td><td>Premium / high-value</td><td>Exclusive, polished</td></tr>
+            <tr><td><code>void-green</code></td><td>Dev tools / data-heavy</td><td>Technical, focused</td></tr>
+          </table>
+        </div>
+        <div class="code" style="margin-top:12px"><span class="prompt">Claude: </span><span class="cmd">let's go with whale blue</span></div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">[+]</span>
+        <div class="callout-body"><strong>The palette generates CSS variables</strong>After you choose, the brand skill outputs <code>:root</code> CSS variables for colour, typography scale, and spacing. These are used automatically by the frontend generation step.</div>
+      </div>
+    </section>
+
+    <!-- STEP 7: Build UI -->
+    <section class="tutorial-section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>Build the Front End</h2>
+        <span class="time-est">8 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Generate a complete, styled trading interface with mock data — ready for visual review before any contracts are written.
+      </div>
+
+      <div class="callout danger">
+        <span class="callout-icon">[x]</span>
+        <div class="callout-body"><strong>Always use mock data first</strong>Tell the skill explicitly to use mock data. This lets you review and approve the UI before it drives your Anchor account structure. Changing account layouts after writing contracts is expensive.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Generate the UI</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">now build the full front end for the Power Perps<br>         trading interface — use mock data throughout,<br>         whale blue theme, run on localhost:3000</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">What gets generated</div>
+          ✓ Template 1: Dashboard view (portfolio + open positions)<br>
+          ✓ Template 2: Trading panel (order book + P&L chart)<br>
+          ✓ Template 3: Position management modal<br>
+          ✓ CSS variables from whale blue brand<br>
+          ✓ Mock data layer (positions, trades, chart data)<br>
+          ✓ Responsive layout<br><br>
+          Running on http://localhost:3000 ✓
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Review</span><span class="step-title">Visually approve the UI</span></div>
+        <p>Open <code>http://localhost:3000</code> and review each template. Ask yourself:</p>
+        <ul class="check-list">
+          <li><input type="checkbox"> Does the layout reflect how traders actually work?</li>
+          <li><input type="checkbox"> Is the data hierarchy correct (what's prominent vs secondary)?</li>
+          <li><input type="checkbox"> Are the right interaction patterns present (modals, confirmations)?</li>
+          <li><input type="checkbox"> Does the brand feel match the target user?</li>
+        </ul>
+        <p>Request specific changes before moving on. Layout changes here cost nothing. Account layout changes after contracts cost days.</p>
+      </div>
+
+      <div class="step-card info">
+        <div class="step-header"><span class="step-badge info">Note</span><span class="step-title">What the skill also infers</span></div>
+        <p>Based on the UI it generated, the skill automatically infers and lists:</p>
+        <ul>
+          <li><strong>Anchor account structs</strong> — field names and types</li>
+          <li><strong>Instruction signatures</strong> — open_position, close_position, etc.</li>
+          <li><strong>PDAs needed</strong> — user position account, global state, etc.</li>
+        </ul>
+        <p>This list feeds directly into the scaffold step.</p>
+      </div>
+    </section>
+
+    <!-- STEP 8: Scaffold -->
+    <section class="tutorial-section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <h2>Scaffold the Smart Contract</h2>
+        <span class="time-est">5 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Generate the Anchor program skeleton that matches the UI's data shape, so no account layout redesigns are needed.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">For simple projects — /scaffold-project</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/scaffold-project</span></div>
+        <p>Generates full project directory structure, package.json, Anchor.toml, and basic program skeleton.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">For DeFi protocols — /build-defi-protocol</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/build-defi-protocol — based on the front end we built,<br>         scaffold the Anchor program for Power Perps with<br>         the account structs you inferred from the UI</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">What gets scaffolded</div>
+          programs/power-perps/src/<br>
+          ├── lib.rs          ← program entry point<br>
+          ├── state.rs        ← account structs (Position, GlobalState, ...)<br>
+          ├── instructions/<br>
+          │   ├── open_position.rs<br>
+          │   ├── close_position.rs<br>
+          │   └── update_price.rs<br>
+          ├── errors.rs       ← custom error codes<br>
+          └── constants.rs    ← program constants<br><br>
+          tests/power-perps.ts ← Anchor test suite
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">[+]</span>
+        <div class="callout-body"><strong>From here</strong>The scaffold gives you the structure. Fill in the business logic (the power-law pricing math) — that's your actual innovation, and no AI skill replaces it.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- LAUNCH PHASE -->
+    <div class="phase-banner launch">
+      <span class="icon"><img class="sol-ico" src="assets/sol-mark.svg" alt="Solana"></span>
+      <div class="text">
+        <h3 style="color:var(--orange)">Phase 3: Launch</h3>
+        <p>Present your work, get honest feedback, and ship it.</p>
+      </div>
+    </div>
+
+    <!-- STEP 9: Pitch Deck -->
+    <section class="tutorial-section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <h2>Create the Pitch Deck</h2>
+        <span class="time-est">5 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Generate a complete, hackathon-ready HTML pitch deck with rubric-projected scores — with minimal editing needed after.
+      </div>
+
+      <div class="skill-detail">
+        <div class="skill-name">/create-pitch-deck</div>
+        <div class="skill-meta"><span>~90 seconds</span><span>HTML output</span><span>8 slides</span><span>Rubric-scored</span></div>
+        <p>Generates 8 slides mapped to the Colosseum judging rubric. Asks 3 questions before generating. Includes projected scores per rubric dimension and flags 2 placeholders you need to swap before submitting.</p>
+        <div class="produces">Produces: <span>8-slide HTML deck</span><span>Rubric projection</span><span>Placeholder list</span></div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Generate the pitch deck</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/create-pitch-deck</span></div>
+        <p>Answer the 3 questions when prompted:</p>
+        <div class="code"><span class="output">What is this deck for?</span>
+<span class="prompt">→ </span><span class="cmd">Colosseum</span>
+
+<span class="output">What tone of writing on the slides?</span>
+<span class="prompt">→ </span><span class="cmd">Technical but accessible</span>
+
+<span class="output">Team size and stage?</span>
+<span class="prompt">→ </span><span class="cmd">2-person team, prototype stage</span></div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">After generation</span><span class="step-title">Swap the 2 placeholders</span></div>
+        <p>The skill will tell you exactly what to replace. Typically:</p>
+        <ul>
+          <li><code>[TEAM_PHOTO]</code> → actual team photo or headshots</li>
+          <li><code>[DEMO_URL]</code> → live demo link or Vercel preview URL</li>
+        </ul>
+        <div class="callout warn">
+          <span class="callout-icon">[!]</span>
+          <div class="callout-body"><strong>Don't skip the placeholders</strong>Judges notice blank or obviously placeholder content. The deck is 95% ready — the 2 swaps are the last 5%.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 10: Roast -->
+    <section class="tutorial-section" id="s10">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <h2>Roast Your Product</h2>
+        <span class="time-est">3 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Get a brutally honest pre-submission quality check — find the issues before the judges do.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Run /roast-my-product</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/roast-my-product</span></div>
+
+        <div class="expected-output">
+          <div class="eo-label">Example roast output</div>
+          ROAST REPORT<br><br>
+          "This dead protocol is proof of demand with a<br>
+          formidable name and zero engine code."<br><br>
+          SCORE: 45 / 110<br><br>
+          ISSUES (ranked by severity):<br>
+          1. [CRITICAL] Common sense detected in target user section<br>
+             → "retail traders" is too broad. Define: Drift users<br>
+               with $10k+ portfolios wanting leveraged exotic plays.<br>
+          2. [HIGH] UX red flags on position entry flow<br>
+             → 4-step confirmation is 3 steps too many<br>
+          3. [MEDIUM] Token model is unclear<br>
+             → Is there a token? Why? Answer clearly or remove claim.<br><br>
+          VERDICT: Ship the prototype, get 5 real users,<br>
+          validate demand before writing more contract code.
+        </div>
+      </div>
+
+      <div class="decision-box">
+        <h4>How to interpret the roast score</h4>
+        <div class="decision-row">
+          <span class="decision-cond">80–110 — Green</span>
+          <span class="decision-action">→ Submit as-is. You're in good shape.</span>
+        </div>
+        <div class="decision-row">
+          <span class="decision-cond">60–79 — Yellow</span>
+          <span class="decision-action">→ Fix the top 2 issues, re-run roast.</span>
+        </div>
+        <div class="decision-row">
+          <span class="decision-cond">40–59 — Orange</span>
+          <span class="decision-action">→ Address all critical issues before submitting.</span>
+        </div>
+        <div class="decision-row">
+          <span class="decision-cond">&lt;40 — Red</span>
+          <span class="decision-action">→ Pivot the positioning. The idea may be fine but the story isn't.</span>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">[+]</span>
+        <div class="callout-body"><strong>A low score is not failure</strong>It's a prioritised fix list. A roast score of 45 with a clear fix list is more actionable than a 70 with vague feedback.</div>
+      </div>
+    </section>
+
+    <!-- STEP 11: Marketing Video -->
+    <section class="tutorial-section" id="s11">
+      <div class="section-header">
+        <div class="section-num">11</div>
+        <h2>Marketing Video</h2>
+        <span class="time-est">3 min</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Generate a script and storyboard for a 60–90 second explainer video to share on X/Twitter.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Generate video script</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/marketing-video — Power Perps, targeting Solana DeFi<br>         traders, 60 seconds, share on X</span></div>
+        <p>The skill outputs a shot-by-shot script with narration, on-screen text, and visual cues. Use it as a brief for a screen recording or a designed video.</p>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">[i]</span>
+        <div class="callout-body"><strong>/video-craft</strong>For a more detailed production brief — including hook structure, pacing, and platform-specific optimisations — use <code>/video-craft</code> after <code>/marketing-video</code>.</div>
+      </div>
+    </section>
+
+    <!-- STEP 12: Deploy -->
+    <section class="tutorial-section" id="s12">
+      <div class="section-header">
+        <div class="section-num">12</div>
+        <h2>Deploy to Mainnet</h2>
+        <span class="time-est">10 min (when ready)</span>
+      </div>
+
+      <div class="goal-box">
+        <div class="label">Goal</div>
+        Follow the Superstack deployment checklist to ship safely — program verification, upgrade authority, and monitoring.
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">Step</span><span class="step-title">Run the deployment checklist</span></div>
+        <div class="code"><span class="prompt">Claude: </span><span class="cmd">/deploy-to-mainnet</span></div>
+        <p>The skill walks you through:</p>
+        <ul class="check-list">
+          <li><input type="checkbox"> Program verified on devnet with full test suite passing</li>
+          <li><input type="checkbox"> Anchor.toml updated with mainnet cluster</li>
+          <li><input type="checkbox"> Upgrade authority transferred to multisig</li>
+          <li><input type="checkbox"> Buffer account funded for deployment</li>
+          <li><input type="checkbox"> Program deployed and verified on-chain</li>
+          <li><input type="checkbox"> Frontend pointing to mainnet program ID</li>
+          <li><input type="checkbox"> Post-deploy smoke test passed</li>
+          <li><input type="checkbox"> Monitoring set up (e.g. Helius webhooks)</li>
+        </ul>
+      </div>
+
+      <div class="callout danger">
+        <span class="callout-icon">[x]</span>
+        <div class="callout-body"><strong>Upgrade authority is critical</strong>Before mainnet, transfer the upgrade authority to a multisig. A single keypair as upgrade authority is a single point of failure and a red flag for serious users.</div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- STEP 13: All Skills Reference -->
+    <section class="tutorial-section" id="s13">
+      <div class="section-header">
+        <div class="section-num">→</div>
+        <h2>All Skills Reference</h2>
+      </div>
+
+      <table class="data-table">
+        <tr><th>Skill</th><th>Phase</th><th>What it produces</th></tr>
+        <tr><td><code>/navigate-skills</code></td><td>Meta</td><td>Full skill catalogue, organised by phase</td></tr>
+        <tr><td><code>/find-next-crypto-idea</code></td><td>Idea</td><td>Ranked idea list with market rationale</td></tr>
+        <tr><td><code>/validate-idea</code></td><td>Idea</td><td>Scored HTML report across 6 dimensions</td></tr>
+        <tr><td><code>/competitive-landscape</code></td><td>Idea</td><td>Competitor matrix + opportunity map</td></tr>
+        <tr><td><code>/defillama-research</code></td><td>Idea</td><td>Live DeFi market data summary</td></tr>
+        <tr><td><code>/colosseum-copilot</code></td><td>Idea</td><td>Rubric alignment + prize track recommendation</td></tr>
+        <tr><td><code>/brand-design</code></td><td>Build</td><td>6 palette options → CSS design tokens</td></tr>
+        <tr><td><code>/frontend-design-guidelines</code></td><td>Build</td><td>Full HTML UI (3 templates) + inferred account layout</td></tr>
+        <tr><td><code>/scaffold-project</code></td><td>Build</td><td>Project directory + Anchor skeleton</td></tr>
+        <tr><td><code>/build-defi-protocol</code></td><td>Build</td><td>Anchor program + account structs + tests</td></tr>
+        <tr><td><code>/build-mobile</code></td><td>Build</td><td>React Native + Mobile Wallet Adapter scaffold</td></tr>
+        <tr><td><code>/solana-beginner</code></td><td>Build</td><td>Commented scaffold for newcomers</td></tr>
+        <tr><td><code>/design-taste</code></td><td>Design</td><td>UI critique with specific improvements</td></tr>
+        <tr><td><code>/roast-my-product</code></td><td>Launch</td><td>Scored critique + prioritised fix list</td></tr>
+        <tr><td><code>/create-pitch-deck</code></td><td>Launch</td><td>8-slide HTML deck + rubric projection</td></tr>
+        <tr><td><code>/marketing-video</code></td><td>Launch</td><td>Script + storyboard for 60–90s video</td></tr>
+        <tr><td><code>/video-craft</code></td><td>Launch</td><td>Platform-optimised video production brief</td></tr>
+        <tr><td><code>/deploy-to-mainnet</code></td><td>Launch</td><td>Deployment checklist + verification steps</td></tr>
+      </table>
+    </section>
+
+    <!-- STEP 14: Contributing -->
+    <section class="tutorial-section" id="s14">
+      <div class="section-header">
+        <div class="section-num">→</div>
+        <h2>Contributing to Superstack</h2>
+      </div>
+
+      <p>Superstack is completely open source. If you built something useful with it, consider contributing the skill back.</p>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-badge">How to contribute</span><span class="step-title">4 steps to add a skill</span></div>
+        <div class="code"><span class="prompt">$ </span><span class="cmd">git clone https://github.com/solana-labs/superstack</span>
+<span class="prompt">$ </span><span class="cmd">cd superstack/skills</span>
+<span class="comment"># Create your skill file following the template</span>
+<span class="prompt">$ </span><span class="cmd">cp _template.md my-new-skill.md</span>
+<span class="comment"># Test locally</span>
+<span class="prompt">$ </span><span class="cmd">cp my-new-skill.md ~/.claude/skills/</span>
+<span class="comment"># Open a PR with demo prompt + expected output</span></div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">[+]</span>
+        <div class="callout-body"><strong>What makes a good skill</strong>Solana-specific, produces a tangible artifact (HTML/code/report), guides the AI through a multi-step workflow, and includes expert context the AI wouldn't have by default.</div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">[i]</span>
+        <div class="callout-body"><strong>Issues and PRs welcome</strong>Use the <code>skill-request</code> label to request a new skill. Use <code>bug</code> if a skill's output is wrong or outdated. The community reviews and merges quickly.</div>
+      </div>
+    </section>
+
+    <!-- Brand footer -->
+    <footer class="site-footer">
+      <a class="pbs" href="https://solana.com" target="_blank" rel="noopener"><img src="assets/powered-by-solana.svg" alt="Powered by Solana"></a>
+      <div class="by">
+        <a href="https://x.com/metasal" target="_blank" rel="noopener"><img class="pfp" src="assets/metasal.jpg" alt="metasal"></a>
+        <span>Built by <a href="https://metasal.xyz" target="_blank" rel="noopener">metasal.xyz</a></span>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Tab switching
+  function showTab(el, contentId) {
+    el.closest('.tutorial-section').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.closest('.tutorial-section').querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById(contentId).classList.add('active');
+  }
+
+  // Sidebar active state
+  const sections = document.querySelectorAll('.tutorial-section');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navItems.forEach(n => {
+          n.classList.toggle('active', n.getAttribute('href') === '#' + id);
+        });
+        // update progress
+        const sectionIds = Array.from(sections).map(s => s.id);
+        const idx = sectionIds.indexOf(id);
+        document.getElementById('progress').style.width = `${((idx + 1) / sections.length) * 100}%`;
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll for nav links
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(item.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

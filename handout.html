@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superstack Handout — Idea to Launch on Solana</title>
+<link rel="canonical" href="https://dev.sol.new/handout">
+<meta name="description" content="One-page reference card: skill tables, checklists, quick commands. dev.sol.new">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="dev.sol.new">
+<meta property="og:url" content="https://dev.sol.new/handout">
+<meta property="og:title" content="Superstack — Printable Handout">
+<meta property="og:description" content="One-page reference card: skill tables, checklists, quick commands. dev.sol.new">
+<meta property="og:image" content="https://dev.sol.new/assets/powered-by-solana.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@metasal">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+    background: #fff;
+    color: #1a1a2e;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media print {
+    body { font-size: 11px; }
+    .no-print { display: none !important; }
+    .page { page-break-after: always; }
+    @page { margin: 1.5cm; size: A4; }
+  }
+
+  .page {
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 28px 36px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 3px solid #9945ff;
+    margin-bottom: 20px;
+  }
+  .header-left h1 { font-size: 22px; font-weight: 800; color: #0a0a1a; }
+  .header-left h2 { font-size: 13px; font-weight: 400; color: #666; margin-top: 3px; }
+  .header-right { text-align: right; font-size: 11px; color: #888; }
+  .install-box {
+    background: #0d1117;
+    color: #14f195;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin-top: 6px;
+    white-space: nowrap;
+  }
+
+  /* Section titles */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  .phase-idea { background: #14b882; }
+  .phase-build { background: #0088cc; }
+  .phase-launch { background: #e05a00; }
+  .phase-meta { background: #7722dd; }
+
+  /* Two column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  /* Skill table */
+  .skill-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .skill-table th {
+    background: #f4f4f8;
+    padding: 6px 10px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #888;
+    border-bottom: 1px solid #ddd;
+  }
+  .skill-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #f0f0f4;
+    vertical-align: top;
+  }
+  .skill-table tr:last-child td { border-bottom: none; }
+  .skill-table .skill-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #9945ff;
+    white-space: nowrap;
+  }
+  .skill-table .skill-desc { color: #444; font-size: 11px; }
+  .skill-table .skill-output {
+    font-size: 10px;
+    color: #888;
+    font-style: italic;
+  }
+
+  /* Command boxes */
+  .cmd {
+    background: #f6f8ff;
+    border: 1px solid #dde;
+    border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 8px 12px;
+    color: #1a1a4a;
+    margin: 6px 0;
+    word-break: break-all;
+  }
+  .cmd .prompt { color: #999; }
+  .cmd .green { color: #14b882; font-weight: 700; }
+  .cmd .purple { color: #9945ff; font-weight: 700; }
+
+  /* Phase box */
+  .phase-box {
+    border: 1px solid #e0e0ec;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .phase-box.idea { border-top: 3px solid #14b882; }
+  .phase-box.build { border-top: 3px solid #0088cc; }
+  .phase-box.launch { border-top: 3px solid #e05a00; }
+
+  /* Checklist */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 4px 0 4px 20px;
+    position: relative;
+    font-size: 11px;
+    color: #333;
+    border-bottom: 1px solid #f4f4f8;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '□';
+    position: absolute;
+    left: 0;
+    color: #ccc;
+    font-size: 13px;
+    line-height: 1;
+    top: 4px;
+  }
+  .checklist li .meta { color: #999; font-size: 10px; }
+
+  /* Tips */
+  .tip {
+    background: #f0faf5;
+    border-left: 3px solid #14b882;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #1a4a35;
+    margin: 8px 0;
+    border-radius: 0 5px 5px 0;
+  }
+  .warning {
+    background: #fff8f0;
+    border-left: 3px solid #e05a00;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #4a1a00;
+    margin: 8px 0;
+    border-radius: 0 5px 5px 0;
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 10px 0;
+  }
+  .flow-step {
+    background: #f4f0ff;
+    border: 1px solid #c8b8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 10px;
+    text-align: center;
+    min-width: 80px;
+  }
+  .flow-step .icon { font-size: 14px; }
+  .flow-step .name { font-family: 'JetBrains Mono', monospace; color: #9945ff; display: block; margin-top: 2px; }
+  .flow-arrow { color: #999; padding: 0 4px; font-size: 14px; }
+
+  /* Score card */
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f4f4f8;
+    font-size: 11px;
+  }
+  .score-row:last-child { border-bottom: none; }
+  .score-label { flex: 1; color: #444; }
+  .score-bar { flex: 2; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; }
+  .score-val { width: 40px; text-align: right; font-weight: 700; }
+
+  /* Footer */
+  .footer {
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #aaa;
+  }
+  .footer strong { color: #9945ff; }
+
+  /* Print button */
+  .print-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #9945ff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .print-btn:hover { background: #7722dd; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid #eee; margin: 16px 0; }
+
+  h3 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  h4 { font-size: 11px; font-weight: 700; color: #555; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  p { font-size: 11px; color: #444; margin-bottom: 6px; }
+
+  .badge {
+    display: inline-block;
+    background: #f0ebff;
+    border: 1px solid #c8b8f0;
+    color: #7722dd;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .badge.green { background: #e8faf4; border-color: #9de8c8; color: #14b882; }
+  .badge.blue { background: #e8f4ff; border-color: #9ec8f0; color: #0088cc; }
+  .badge.orange { background: #fff4e8; border-color: #f0c89e; color: #e05a00; }
+
+  .sol-ico { height: 1em; width: auto; display: inline-block; vertical-align: -0.14em; }
+  .brand-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;padding-top:14px;border-top:1px solid #eee}
+  .brand-footer .by{display:flex;align-items:center;gap:8px;font-size:11px;color:#888}
+  .brand-footer .by img{width:26px;height:26px;border-radius:50%}
+  .brand-footer .by a{color:#9945ff;font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Print / Save PDF</button>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Superstack · Solana.new</h1>
+      <h2>Idea to Launch on Solana — 45-Minute Workshop Handout</h2>
+    </div>
+    <div class="header-right">
+      <div>Install once. Build anything.</div>
+      <div class="install-box">$ bash &lt;(curl -sSf https://solana.new/install)</div>
+    </div>
+  </div>
+
+  <!-- What is Superstack -->
+  <div class="two-col" style="margin-bottom:18px">
+    <div>
+      <h3>What is Superstack?</h3>
+      <p>A library of curated AI skills that install as markdown files into your agent's context directory. Works with <strong>Claude Code</strong>, <strong>OpenAI Codex</strong>, and any other agent runtime.</p>
+      <p>Skills encode expert-level Solana workflows so any AI agent can produce production-quality output without hallucinating the right library or pattern.</p>
+      <div class="cmd"><span class="prompt">~/.claude/skills/</span><br><span class="prompt">~/.codex/skills/</span><br><span class="prompt">~/.agents/skills/</span></div>
+    </div>
+    <div>
+      <h3>The 3-Phase Loop</h3>
+      <div class="flow" style="flex-direction:column; gap:8px">
+        <div class="flow-step" style="width:100%; background:#e8faf4; border-color:#9de8c8">
+          <span class="icon"><img class="sol-ico" src="assets/sol-mark.svg" alt="Solana"></span>
+          <strong>IDEA PHASE</strong>
+          <span class="name">/find → /validate → /research</span>
+        </div>
+        <div style="text-align:center; color:#ccc">↓</div>
+        <div class="flow-step" style="width:100%; background:#e8f4ff; border-color:#9ec8f0">
+          <span class="icon"><img class="sol-ico" src="assets/sol-mark.svg" alt="Solana"></span>
+          <strong>BUILD PHASE</strong>
+          <span class="name">/brand → /frontend → /scaffold</span>
+        </div>
+        <div style="text-align:center; color:#ccc">↓</div>
+        <div class="flow-step" style="width:100%; background:#fff4e8; border-color:#f0c89e">
+          <span class="icon"><img class="sol-ico" src="assets/sol-mark.svg" alt="Solana"></span>
+          <strong>LAUNCH PHASE</strong>
+          <span class="name">/pitch → /roast → /deploy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- IDEA PHASE -->
+  <div class="section-title phase-idea">Phase 1: Idea</div>
+  <table class="skill-table">
+    <tr>
+      <th style="width:170px">Skill</th>
+      <th>What it does</th>
+      <th style="width:160px">Output</th>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/navigate-skills</div></td>
+      <td class="skill-desc">Lists all available skills organised by phase. Start here every session.</td>
+      <td class="skill-output">Categorised skill catalogue</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/find-next-crypto-idea</div></td>
+      <td class="skill-desc">Generates and ranks new product ideas based on current Solana ecosystem gaps and trending categories.</td>
+      <td class="skill-output">Ranked idea list with rationale</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/validate-idea</div></td>
+      <td class="skill-desc">Scores your idea on demand signal, competitive landscape, build feasibility, crypto necessity, target user clarity, and integration-first assessment.</td>
+      <td class="skill-output">Scored HTML report (6 dimensions)</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/competitive-landscape</div></td>
+      <td class="skill-desc">Maps existing competitors, their weaknesses, and the gap your product can fill.</td>
+      <td class="skill-output">Competitor matrix + opportunity map</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/defillama-research</div></td>
+      <td class="skill-desc">Pulls live DeFi market data — TVL, volume, user growth — to validate market size claims.</td>
+      <td class="skill-output">Market data summary</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/colosseum-copilot</div></td>
+      <td class="skill-desc">Hackathon-specific skill. Aligns your idea with Colosseum judging rubric and prize tracks.</td>
+      <td class="skill-output">Rubric alignment + win probability</td>
+    </tr>
+  </table>
+
+  <div class="tip"><strong>Workflow tip:</strong> Run <code>/colosseum-copilot</code> first to orient, then <code>/validate-idea</code> to score your top pick. The validation report becomes the backbone of your pitch deck.</div>
+
+  <hr>
+
+  <!-- BUILD PHASE -->
+  <div class="section-title phase-build">Phase 2: Build</div>
+  <table class="skill-table">
+    <tr>
+      <th style="width:170px">Skill</th>
+      <th>What it does</th>
+      <th style="width:160px">Output</th>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/frontend-design-guidelines</div></td>
+      <td class="skill-desc">Master UI skill — invokes /brand-design internally. Give it your idea + "use mock data" and it builds a full front end with navigation, data tables, charts, and modals.</td>
+      <td class="skill-output">Full HTML UI (3 templates) + CSS tokens</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/brand-design</div></td>
+      <td class="skill-desc">Generates 6 colour palette options as interactive HTML. You choose, it locks the theme and produces CSS custom properties.</td>
+      <td class="skill-output">HTML palette picker + CSS variables</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/scaffold-project</div></td>
+      <td class="skill-desc">Scaffolds the project structure, backend API, Anchor program skeleton, and contract variable names inferred from the UI.</td>
+      <td class="skill-output">Project directory + Anchor skeleton</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/build-defi-protocol</div></td>
+      <td class="skill-desc">Deep DeFi-specific scaffolding — account structs, PDAs, instruction handlers, and test harness for protocols like AMMs, lending, and perps.</td>
+      <td class="skill-output">Anchor program + test suite</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/solana-beginner</div></td>
+      <td class="skill-desc">Guided Solana development for newcomers — explains concepts inline and scaffolds simple programs with comments.</td>
+      <td class="skill-output">Commented program scaffold</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/build-mobile</div></td>
+      <td class="skill-desc">React Native + Mobile Wallet Adapter scaffold for Solana mobile apps.</td>
+      <td class="skill-output">React Native project skeleton</td>
+    </tr>
+  </table>
+
+  <div class="warning"><strong>Order matters:</strong> Always build the UI with mock data first → get visual sign-off → then wire to real Anchor accounts. This avoids expensive contract redesigns driven by UX feedback.</div>
+
+  <hr>
+
+  <!-- LAUNCH PHASE -->
+  <div class="section-title phase-launch">Phase 3: Launch</div>
+  <table class="skill-table">
+    <tr>
+      <th style="width:170px">Skill</th>
+      <th>What it does</th>
+      <th style="width:160px">Output</th>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/create-pitch-deck</div></td>
+      <td class="skill-desc">Asks 3 questions (purpose, tone, stage) then generates 8 slides mapped to the hackathon judging rubric with projected scores per dimension.</td>
+      <td class="skill-output">8-slide HTML deck + rubric score</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/roast-my-product</div></td>
+      <td class="skill-desc">Brutal honest critique across 5 dimensions: value prop, crypto necessity, target user, UX friction, token model. Gives a score out of 110 and a ranked fix list.</td>
+      <td class="skill-output">Roast report + prioritised fix list</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/marketing-video</div></td>
+      <td class="skill-desc">Generates a script and visual storyboard for a 60–90 second explainer video optimised for sharing on X/Twitter.</td>
+      <td class="skill-output">Script + shot-by-shot storyboard</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/video-craft</div></td>
+      <td class="skill-desc">Packages your product into a shareable video format — hook, demo, CTA — tuned for the Solana/crypto audience.</td>
+      <td class="skill-output">Video production brief</td>
+    </tr>
+    <tr>
+      <td><div class="skill-name">/deploy-to-mainnet</div></td>
+      <td class="skill-desc">Step-by-step mainnet deployment checklist — program verification, upgrade authority, multisig setup, and post-deploy monitoring.</td>
+      <td class="skill-output">Deployment checklist + verification steps</td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- Design + Meta -->
+  <div class="two-col">
+    <div>
+      <div class="section-title phase-meta">Design & Quality</div>
+      <table class="skill-table" style="margin-bottom:0">
+        <tr>
+          <th style="width:150px">Skill</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td><div class="skill-name">/design-taste</div></td>
+          <td class="skill-desc">Evaluates your UI against aesthetic principles and gives specific improvements</td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">/brand-design</div></td>
+          <td class="skill-desc">Colour, type, spacing system with CSS vars</td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">/roast-my-product</div></td>
+          <td class="skill-desc">Pre-launch quality gate — use before every submission</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <h3>Validate-Idea Score Dimensions</h3>
+      <div class="score-row"><span class="score-label">Demand Signal</span><div class="score-bar"><div class="score-fill" style="width:80%;background:#14b882"></div></div><span class="score-val" style="color:#14b882">✓</span></div>
+      <div class="score-row"><span class="score-label">Competitive Risk</span><div class="score-bar"><div class="score-fill" style="width:55%;background:#e05a00"></div></div><span class="score-val" style="color:#e05a00">Med</span></div>
+      <div class="score-row"><span class="score-label">Build Feasibility</span><div class="score-bar"><div class="score-fill" style="width:75%;background:#0088cc"></div></div><span class="score-val" style="color:#0088cc">✓</span></div>
+      <div class="score-row"><span class="score-label">Crypto Necessity</span><div class="score-bar"><div class="score-fill" style="width:90%;background:#9945ff"></div></div><span class="score-val" style="color:#9945ff">✓</span></div>
+      <div class="score-row"><span class="score-label">Target User Clarity</span><div class="score-bar"><div class="score-fill" style="width:60%;background:#e05a00"></div></div><span class="score-val" style="color:#e05a00">Low</span></div>
+      <div class="score-row"><span class="score-label">Integration-First</span><div class="score-bar"><div class="score-fill" style="width:85%;background:#14b882"></div></div><span class="score-val" style="color:#14b882">✓</span></div>
+      <div class="tip" style="margin-top:8px; font-size:10px">Build on existing Solana infra (Jupiter, Drift, Metaplex) rather than new protocols from scratch.</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Checklists -->
+  <div class="two-col">
+    <div>
+      <h3>Hackathon Pre-Submit Checklist</h3>
+      <ul class="checklist">
+        <li>Run <code>/validate-idea</code> on your final idea <span class="meta">— score all 6 dimensions</span></li>
+        <li>Built UI with mock data first <span class="meta">— visual sign-off before contracts</span></li>
+        <li>Ran <code>/roast-my-product</code> <span class="meta">— addressed top 3 issues</span></li>
+        <li>Pitch deck generated with <code>/create-pitch-deck</code></li>
+        <li>Swapped 2 placeholders in pitch deck <span class="meta">— team photos, demo URL</span></li>
+        <li>Rubric alignment checked via <code>/colosseum-copilot</code></li>
+        <li>Demo video or storyboard ready <span class="meta">— via /marketing-video</span></li>
+        <li>Project README reflects actual build <span class="meta">— not generated boilerplate</span></li>
+        <li>Smart contract verified on devnet</li>
+        <li>Upgrade authority set to multisig for mainnet</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Common Mistakes to Avoid</h3>
+      <ul class="checklist">
+        <li>Building a full protocol when an integration would do <span class="meta">— use /validate-idea's integration-first check</span></li>
+        <li>Skipping the roast <span class="meta">— judges will say the same things, less kindly</span></li>
+        <li>Writing contracts before the UI is approved <span class="meta">— UX changes break account layouts</span></li>
+        <li>Generic pitch tone <span class="meta">— /create-pitch-deck asks your tone for a reason</span></li>
+        <li>Not targeting a specific prize track <span class="meta">— use /colosseum-copilot to pick one</span></li>
+        <li>Ignoring the demand signal dimension <span class="meta">— "cool tech" ≠ users</span></li>
+        <li>Leaving AI-generated filler in the pitch deck</li>
+        <li>Missing the deploy checklist <span class="meta">— /deploy-to-mainnet covers this</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Top Ideas -->
+  <div>
+    <h3>Top Hackathon Ideas from solana.new</h3>
+    <div class="three-col" style="margin-top:10px">
+      <div class="phase-box idea">
+        <strong>Power Perps</strong>
+        <p>Power-law perpetuals with exotic payoffs. Build on Drift/Jupiter rather than a new protocol.</p>
+        <span class="badge green">High demand</span>
+      </div>
+      <div class="phase-box build">
+        <strong>Social Recovery Wallet</strong>
+        <p>Account abstraction with guardian-based recovery for mass market onboarding.</p>
+        <span class="badge blue">Mass market</span>
+      </div>
+      <div class="phase-box launch">
+        <strong>AI Agent Treasury</strong>
+        <p>On-chain treasury managed by AI agent with multi-sig human override circuit breaker.</p>
+        <span class="badge orange">AI + DeFi</span>
+      </div>
+      <div class="phase-box idea">
+        <strong>Prediction Markets</strong>
+        <p>Consumer-grade UX on top of existing Solana prediction infrastructure.</p>
+        <span class="badge green">Consumer</span>
+      </div>
+      <div class="phase-box build">
+        <strong>Liquidity Router</strong>
+        <p>Cross-DEX aggregation with MEV protection for retail traders.</p>
+        <span class="badge blue">DeFi infra</span>
+      </div>
+      <div class="phase-box launch">
+        <strong>ZK Identity</strong>
+        <p>Proof of personhood using ZK credentials — high complexity, high reward.</p>
+        <span class="badge orange">Advanced</span>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Key Commands Quick Ref -->
+  <div>
+    <h3>Quick-Reference Command Card</h3>
+    <div class="three-col" style="margin-top:10px">
+      <div>
+        <h4 style="color:#14b882">Idea Phase</h4>
+        <div class="cmd"><span class="green">/navigate-skills</span></div>
+        <div class="cmd"><span class="green">/find-next-crypto-idea</span></div>
+        <div class="cmd"><span class="green">/validate-idea</span> [paste problem]</div>
+        <div class="cmd"><span class="green">/colosseum-copilot</span></div>
+        <div class="cmd"><span class="green">/defillama-research</span></div>
+        <div class="cmd"><span class="green">/competitive-landscape</span></div>
+      </div>
+      <div>
+        <h4 style="color:#0088cc">Build Phase</h4>
+        <div class="cmd"><span class="purple">/frontend-design-guidelines</span></div>
+        <div class="cmd" style="font-size:10px"><span class="prompt">→</span> "use mock data to start"</div>
+        <div class="cmd"><span class="purple">/brand-design</span></div>
+        <div class="cmd"><span class="purple">/scaffold-project</span></div>
+        <div class="cmd"><span class="purple">/build-defi-protocol</span></div>
+        <div class="cmd"><span class="purple">/build-mobile</span></div>
+      </div>
+      <div>
+        <h4 style="color:#e05a00">Launch Phase</h4>
+        <div class="cmd"><span class="green">/create-pitch-deck</span></div>
+        <div class="cmd" style="font-size:10px"><span class="prompt">→</span> Choose: Colosseum, technical tone</div>
+        <div class="cmd"><span class="green">/roast-my-product</span></div>
+        <div class="cmd"><span class="green">/marketing-video</span></div>
+        <div class="cmd"><span class="green">/video-craft</span></div>
+        <div class="cmd"><span class="green">/deploy-to-mainnet</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand footer -->
+  <div class="brand-footer">
+    <a href="https://solana.com" target="_blank" rel="noopener"><img src="assets/powered-by-solana.svg" alt="Powered by Solana" style="height:40px;display:block"></a>
+    <div class="by">
+      <a href="https://x.com/metasal" target="_blank" rel="noopener"><img src="assets/metasal.jpg" alt="metasal"></a>
+      <span>Built by <a href="https://metasal.xyz" target="_blank" rel="noopener">metasal.xyz</a></span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div><strong>solana.new</strong> · github.com/solana-labs/superstack · Open source — clone, contribute, extend</div>
+    <div>Install: <code>bash &lt;(curl -sSf https://solana.new/install)</code></div>
+  </div>
+
+</div>
+
+</body>
+</html>
