@@ -439,6 +439,22 @@
   /* Divider */
   .divider { height: 1px; background: var(--border); margin: 32px 0; }
 
+  /* Mobile */
+  @media (max-width: 860px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; max-width: 100%; padding: 32px 20px 44px; }
+    .progress-bar { left: 0; }
+    .page-header h1 { font-size: 1.7rem; }
+    .page-header .subtitle { font-size: 1rem; }
+    .section-header { flex-wrap: wrap; gap: 8px; }
+    .section-header h2 { font-size: 1.25rem; }
+    .section-header .time-est { margin-left: 0; }
+    .skill-meta { flex-wrap: wrap; }
+    .data-table { display: block; overflow-x: auto; }
+    .code { font-size: 12px; }
+    .site-footer { gap: 12px; }
+  }
+
   .sol-ico { height: 1em; width: auto; display: inline-block; vertical-align: -0.14em; }
   .callout-icon{font-weight:700;font-family:'JetBrains Mono',monospace}
   .callout.tip .callout-icon{color:var(--green)}
